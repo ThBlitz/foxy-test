@@ -5,6 +5,6 @@ set versionName=%2
 
 if defined imageName (
 
-    docker build -t %imageName% -f Envs/Dockerfile.%versionName% .
+    docker build -t %imageName% -f Envs/%versionName%.Dockerfile .
 
 )
