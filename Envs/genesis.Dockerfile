@@ -29,10 +29,11 @@ WORKDIR /home/python
 
 RUN wget https://www.python.org/ftp/python/3.8.13/Python-3.8.13.tgz
 RUN tar -xvf Python-3.8.13.tgz
+RUN rm Python-3.8.13.tgz
 WORKDIR /home/python/Python-3.8.13
 RUN ./configure --enable-optimizations
 RUN make install 
-RUN pip3 install virtualenv
+RUN pip3 install virtualenv --no-cache-dir
 
 WORKDIR /home
 RUN mkdir -p mount
