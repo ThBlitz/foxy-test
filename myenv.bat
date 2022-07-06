@@ -24,7 +24,7 @@ if defined arg3 (
 
 if "%arg2%"=="build" (
     if defined arg3 (
-        docker build -t %arg3% -f Envs/%arg3%.Dockerfile .
+        docker build -t %arg3% -f Envs/%arg3%.Dockerfile Envs
     )
 )
 
@@ -35,7 +35,7 @@ if "%arg2%"=="run" (
 
     docker run --rm -d -t --name=%containerName% ^
     -p 8888:8888 -p 3000:3000 ^
-    --mount src=%cd%,target=/home/mount,type=bind ^
+    -v %cd%:/home/mount ^
     %arg3%
 )
 

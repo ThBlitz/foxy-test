@@ -39,6 +39,8 @@ WORKDIR /home
 RUN mkdir -p mount
 WORKDIR /home/mount
 
+COPY myenv /usr/local/bin
+
 
 
 

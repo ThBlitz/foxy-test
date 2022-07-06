@@ -1,0 +1,21 @@
+#!/bin/bash
+
+$mount=/home/mount
+
+command=$1
+name=$2
+
+if [ $command == activate ]
+then
+    if [ -z ${activeEnv+x} ] || [ activeEnv == False ]
+    then
+        source $mount/$name/bin/activate
+        activeEnv=True
+    fi
+elif [ $command == deactivate ]
+then
+    deactivate
+    activeEnv=False
+fi
+
+
