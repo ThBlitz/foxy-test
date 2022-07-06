@@ -5,18 +5,13 @@ name=$2
 
 mountPath="/home/mount"
 
-
 if [ $command == activate ]
 then
-    if [ -z ${activeEnv+x} ] || [ $activeEnv == False ]
-    then
-        source $mountPath/$name/bin/activate
-        activeEnv="True"
-    fi
-elif [ $command == deactivate ]
+    source $mountPath/$name/bin/activate
+elif [ $command == create ]
 then
-    deactivate
-    activeEnv="False"
+    [ ! -d "$mountPath/$name" ] && virtualenv $mountPath/$name
+elif [ $command == remove ]
+then
+    [ -d "$mountPath/$name" ] && rm -r $mountPath/$name
 fi
-
-
