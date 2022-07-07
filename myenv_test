@@ -3,8 +3,6 @@
 command=$1
 name=$2
 
-echo $command
-
 envsPath="/home/mount/py_Envs"
 
 
@@ -16,10 +14,11 @@ then
     [ ! -d "$envsPath/$name" ] && virtualenv $envsPath/$name
 elif [ $command == remove ]
 then
-    [ -d "$envsPath/$name" ] && [ rm -r $envsPath/$name ]
-fi
-
-if [[ $command == install ]]
+    [ -d "$envsPath/$name" ] && rm -r $envsPath/$name
+elif [ $command == install ]
 then
-    echo
+    if [ -n "$VIRTUAL_ENV" ]
+    then
+        pip install $name --no-cache-dir
+    fi
 fi
