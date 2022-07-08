@@ -1,24 +1,45 @@
 #!/bin/bash
 
-command=$1
-name=$2
+arg1=$1
+arg2=$2
+arg3=$3
 
-envsPath="/home/mount/py_Envs"
+workingDirectory=$PWD
+foxyMainPath="foxy"
+envsPath=$workingDirectory/$foxyMainPath
 
+bridge="$envsPath/bridge.py"
+py_exe="/usr/local/bin/python3"
 
-if [ $command == activate ]
+$py_exe $bridge $arg1 $arg2 $arg3
+
+if [ -n "$arg1" ]
 then
-    source $envsPath/$name/bin/activate
-elif [ $command == create ]
-then
-    [ ! -d "$envsPath/$name" ] && virtualenv $envsPath/$name
-elif [ $command == remove ]
-then
-    [ -d "$envsPath/$name" ] && rm -r $envsPath/$name
-elif [ $command == install ]
-then
-    if [ -n "$VIRTUAL_ENV" ]
+    if [ $arg1 == "activate" ]
     then
-        pip install $name --no-cache-dir
-    fi
+        source $envsPath/$arg2/bin/activate
+    elif [ $arg1 == "deactivate" ]
+    then
+        deactivate
+    fi 
 fi
+
+
+
+
+# if [ $command == activate ]
+# then
+#     source $envsPath/$name/bin/activate
+# elif [ $command == create ]
+# then
+#     [ ! -d "$envsPath/$name" ] && virtualenv $envsPath/$name
+# elif [ $command == remove ]
+# then
+#     [ -d "$envsPath/$name" ] && rm -r $envsPath/$name
+# elif [ $command == install ]
+# then
+#     if [ -n "$VIRTUAL_ENV" ]
+#     then
+#         pip install $name --no-cache-dir
+#     fi
+# fi
