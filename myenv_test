@@ -6,10 +6,25 @@ arg3=$3
 
 workingDirectory=$PWD
 foxyMainPath="foxy"
-envsPath=$workingDirectory/$foxyMainPath
+envsPath=$workingDirectory/$foxyMainPath/py_envs
 
 bridge="$envsPath/bridge.py"
 py_exe="/usr/local/bin/python3"
+
+if [ -z ${arg1+x} ]
+then
+    arg1="info"
+fi
+
+if [ -z ${arg2+x} ]
+then
+    arg2="None"
+fi
+
+if [ -z ${arg3+x} ]
+then
+    arg3="None"
+fi
 
 $py_exe $bridge $arg1 $arg2 $arg3
 
