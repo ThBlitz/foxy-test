@@ -1,0 +1,6 @@
+#!/bin/bash
+
+py_exe="/usr/local/bin/python3"
+fox_path=""
+
+py_envs="/py_envs"

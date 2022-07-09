@@ -5,11 +5,19 @@ arg2=$2
 arg3=$3
 
 workingDirectory=$PWD
-foxyMainPath="foxy"
-envsPath=$workingDirectory/$foxyMainPath/py_envs
+envsPath=$workingDirectory
 
-bridge="$envsPath/bridge.py"
-py_exe="/usr/local/bin/python3"
+py_exe=
+fox_path=
+bridge=
+
+source ./path_settings
+
+if [ -n "$py_envs" ]
+then
+    envsPath=$workingDirectory/$py_envs
+    arg5=$envsPath
+fi
 
 if [ -z ${arg1+x} ]
 then
@@ -26,7 +34,16 @@ then
     arg3="None"
 fi
 
-$py_exe $bridge $arg1 $arg2 $arg3
+if [ -z ${VIRTUAL_ENV+x} ]
+then
+    arg4="__VIRTUAL_ENV_VARIABLE_NOT_DEFINED__"
+fi
+
+if [ -n "$py_exe" ] && [ -n "$bridge" ]:
+then
+    bridge=$fox_path/"brdige.py"
+    $py_exe $bridge $arg1 $arg2 $arg3 $arg4 $arg5
+fi
 
 if [ -n "$arg1" ]
 then
