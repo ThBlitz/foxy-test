@@ -31,7 +31,7 @@ if __name__ == '__main__':
     
     permission = []
     permission.append('a')
-    if virtual_env_var == "__VIRTUAL_ENV_VARIABLE_NOT_DEFINED__":
+    if virtual_env_var == "__none__":
         virtual_env_var = None 
         permission.append('o')
     else:
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         stdOut.print_error(0)
 
     else:
-
+        print(command)
     
         
 

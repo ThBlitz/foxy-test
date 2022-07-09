@@ -1,0 +1,43 @@
+#!/usr/bin/bash
+
+#sed -i.bak s/$'\r'//g ./path_settings
+
+arg1=$1
+arg2=$2
+arg3=$3
+
+if [ -z ${arg1} ]
+then
+    arg1="info"
+fi
+
+if [ -z ${arg2} ]
+then
+    arg2="None"
+fi
+
+if [ -z ${arg3} ]
+then
+    arg3="None"
+fi
+
+if [ -z ${VIRTUAL_ENV} ]
+then
+    arg4="__none__"
+fi
+
+workingDirectory=$PWD
+
+. ./path_settings
+
+if [ -n ${py_envs} ]
+then
+    py_envs=$workingDirectory$py_envs
+else
+    py_envs=$workingDirectory
+fi
+
+if [ -n ${fox_path} ] && [ -n ${py_exe} ]
+then
+    $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $py_envs
+fi

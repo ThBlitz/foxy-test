@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 arg1=$1
 arg2=$2
@@ -9,13 +9,12 @@ envsPath=$workingDirectory
 
 py_exe=
 fox_path=
-bridge=
 
 source ./path_settings
 
 if [ -n "$py_envs" ]
 then
-    envsPath=$workingDirectory/$py_envs
+    envsPath=$workingDirectory$py_envs
     arg5=$envsPath
 fi
 
@@ -36,13 +35,12 @@ fi
 
 if [ -z ${VIRTUAL_ENV+x} ]
 then
-    arg4="__VIRTUAL_ENV_VARIABLE_NOT_DEFINED__"
+    arg4="__none__"
 fi
 
-if [ -n "$py_exe" ] && [ -n "$bridge" ]:
+if [ -n "$py_exe" ] && [ -n "$fox_path" ]
 then
-    bridge=$fox_path/"brdige.py"
-    $py_exe $bridge $arg1 $arg2 $arg3 $arg4 $arg5
+    [ "$py_exe" "$fox_path" "$arg1" "$arg2" "$arg3" "$arg4" "$arg5" ]
 fi
 
 if [ -n "$arg1" ]
