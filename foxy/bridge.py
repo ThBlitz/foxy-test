@@ -1,6 +1,6 @@
 import sys
 import os
-import stdOut
+import stdout
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,10 +38,9 @@ if __name__ == '__main__':
         permission.append('i')
 
     if command not in list_of_commands:
-        stdOut.print_error(0)
-
+        stdout.print_error(0)
     else:
-        print(command)
+        print('right command')
     
         
 

@@ -14,5 +14,4 @@ def help_():
 def get_time():
     return time_str
 
-def check_for_active_env():
-    return bool
+def 

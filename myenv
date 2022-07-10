@@ -28,7 +28,7 @@ fi
 
 workingDirectory=$PWD
 
-. ./path_settings
+. $workingDirectory/path_settings
 
 if [ -n ${py_envs} ]
 then
@@ -41,3 +41,12 @@ if [ -n ${fox_path} ] && [ -n ${py_exe} ]
 then
     $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $py_envs
 fi
+
+if [ $arg1 == "activate" ]
+then
+    source $envsPath/$arg2/bin/activate
+elif [ $arg1 == "deactivate" ]
+then
+    deactivate
+fi 
+

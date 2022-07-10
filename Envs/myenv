@@ -1,25 +1,52 @@
-#!/bin/bash
+#!/usr/bin/bash
 
-command=$1
-name=$2
+#sed -i.bak s/$'\r'//g ./path_settings
 
-echo $command
+arg1=$1
+arg2=$2
+arg3=$3
 
-envsPath="/home/mount/py_Envs"
-
-
-if [ $command == activate ]
+if [ -z ${arg1} ]
 then
-    source $envsPath/$name/bin/activate
-elif [ $command == create ]
-then
-    [ ! -d "$envsPath/$name" ] && virtualenv $envsPath/$name
-elif [ $command == remove ]
-then
-    [ -d "$envsPath/$name" ] && [ rm -r $envsPath/$name ]
+    arg1="info"
 fi
 
-if [[ $command == install ]]
+if [ -z ${arg2} ]
 then
-    echo
+    arg2="None"
 fi
+
+if [ -z ${arg3} ]
+then
+    arg3="None"
+fi
+
+if [ -z ${VIRTUAL_ENV} ]
+then
+    arg4="__none__"
+fi
+
+workingDirectory=$PWD
+
+. $workingDirectory/path_settings
+
+if [ -n ${py_envs} ]
+then
+    py_envs=$workingDirectory$py_envs
+else
+    py_envs=$workingDirectory
+fi
+
+if [ -n ${fox_path} ] && [ -n ${py_exe} ]
+then
+    $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $py_envs
+fi
+
+if [ $arg1 == "activate" ]
+then
+    source $envsPath/$arg2/bin/activate
+elif [ $arg1 == "deactivate" ]
+then
+    deactivate
+fi 
+
