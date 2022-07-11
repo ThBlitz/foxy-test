@@ -2,6 +2,7 @@ import stdout
 import time
 import subprocess
 import os
+import shutil
 
 list_of_commands = {
         'info': ('a'),
@@ -80,6 +81,27 @@ def create(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 def remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 
     if VIRTUAL_ENV_VAR == None:
+        final_path = os.path.join(ENVS_PATH, arg_2)
+        y_or_n = None
+        for x in get_envs_dir_list(ENVS_PATH): 
+            if final_path in x.path:
+                y_or_n = stdout.print_prompt(1)
+                break
         
+        if y_or_n == 'y':
+            shutil.rmtree(final_path)
+        elif y_or_n == None:
+            stdout.print_error(2)
+
     else:
         stdout.print_error(1)
+
+def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
+    
+    if VIRTUAL_ENV_VAR == None:
+        pass 
+    
+    else:
+        stdout.print_error(1)
+    
+    return
