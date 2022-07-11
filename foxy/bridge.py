@@ -18,28 +18,10 @@ if __name__ == '__main__':
 
     permissions = ('o', 'i', 'a') # inside, outside, anywhere
 
-    list_of_commands = {
-        'info': ('a'),
-        'commands': ('a'),
-        'list_envs': ('a'),
-        'env_info': ('i', 'o'),
-        'create': ('o'),
-        'remove': ('o'),
-        'clone': ('o'),
-        'rename': ('o'),
-        'list_versions': ('o', 'i'),
-        'clone_version': ('o', 'i'),
-        'change_version': ('o', 'i'),
-        'settings': ('i', 'o')
-    }
+    list_of_commands = operations.list_of_commands
     
-    permission = []
-    permission.append('a')
     if VIRTUAL_ENV_VAR == "__none__":
         VIRTUAL_ENV_VAR = None 
-        permission.append('o')
-    else:
-        permission.append('i')
 
     if command not in list_of_commands:
         stdout.print_error(0)
