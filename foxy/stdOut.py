@@ -13,6 +13,10 @@ error_messages = {
     2: [
         'specified env not found in the directory (error 2)',
         'enter the right env name OR check if envs dir is correctly specified in path_settings.foxy'
+    ],
+    3: [
+        'required arguments are missing (error 3)',
+        'enter the right arguments'
     ]
 
 }

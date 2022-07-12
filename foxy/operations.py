@@ -99,7 +99,10 @@ def remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     
     if VIRTUAL_ENV_VAR == None:
-        pass 
+        if arg_2 != None and arg_3 != None:
+            pass 
+        else:
+            stdout.print_error(3)
     
     else:
         stdout.print_error(1)
