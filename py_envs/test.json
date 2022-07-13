@@ -1,0 +1,14 @@
+{
+    "env_name": "test",
+    "python_version": "3.8.13 (default, Jul 10 2022, 15:27:02) \n[GCC 11.3.0]",
+    "total_versions": 0,
+    "versions": [
+        {
+            "created": 1657732349.0634973,
+            "created_unix_epoch": 1657732349.0634983,
+            "pip_list": [
+                null
+            ]
+        }
+    ]
+}

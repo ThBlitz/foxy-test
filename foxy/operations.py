@@ -3,6 +3,8 @@ import time
 import subprocess
 import os
 import shutil
+import sys
+import json
 
 list_of_commands = {
         'info': ('a'),
@@ -21,7 +23,6 @@ list_of_commands = {
 
 env_meta = {
     'env_name':None,
-    'env_path':None,
     'python_version':None,
     'total_versions':0,
     'versions':[
@@ -34,7 +35,7 @@ env_meta = {
 }
 
 def get_envs_dir_list(ENVS_PATH):
-    envs_dir_list = [x for x in os.scandir(ENVS_PATH) if x.is_dir() ]
+    envs_dir_list = set([x for x in os.scandir(ENVS_PATH) if x.is_dir() ])
     return envs_dir_list
 
 def info(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
@@ -65,12 +66,38 @@ def create(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
             if final_path in x.path:
                 y_or_n = stdout.print_prompt(0)
                 break
-        
+
         if y_or_n == None or y_or_n == 'y': 
+
+            if y_or_n == 'y':
+                remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH)
+            
             output = subprocess.run(
                 f'virtualenv --clear {final_path}',
                 shell=True, stdout=subprocess.PIPE
             ).stdout.decode('utf-8')
+            
+            env_meta = {
+                'env_name':arg_2,
+                'python_version':sys.version,
+                'total_versions':0,
+                'versions':[
+                    {
+                        'created': time.time(),
+                        'created_unix_epoch':time.time(),
+                        'pip_list': [None]
+                    }
+                ]
+            }
+
+            final_path = os.path.join(final_path, 'env_meta.json')
+
+            with open(final_path, 'w') as f:
+                json.dump(env_meta, f, indent = 4)
+            
+            with open(os.path.join(ENVS_PATH, f'{arg_2}.json'), 'w') as f:
+                json.dump(env_meta, f, indent = 4)
+
             ####################
             print(output)
             ####################
@@ -90,17 +117,34 @@ def remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         
         if y_or_n == 'y':
             shutil.rmtree(final_path)
+            os.remove(os.path.join(ENVS_PATH, arg_2))
+            
         elif y_or_n == None:
             stdout.print_error(2)
 
     else:
         stdout.print_error(1)
 
+def build(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
+    
+    return 
+
 def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     
     if VIRTUAL_ENV_VAR == None:
         if arg_2 != None and arg_3 != None:
-            pass 
+            final_path = os.path.join(ENVS_PATH, arg_2)
+            env_exists = False
+            for x in get_envs_dir_list(ENVS_PATH): 
+                if final_path in x.path:
+                    env_exists = True
+                    break
+
+            if env_exists:
+                build(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH)
+            else:
+                stdout.print_error(2)
+
         else:
             stdout.print_error(3)
     
