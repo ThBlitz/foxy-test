@@ -13,12 +13,12 @@ fi
 
 if [ -z ${arg2} ]
 then
-    arg2="None"
+    arg2="__none__"
 fi
 
 if [ -z ${arg3} ]
 then
-    arg3="None"
+    arg3="__none__"
 fi
 
 if [ -z ${VIRTUAL_ENV} ]

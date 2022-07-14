@@ -16,6 +16,12 @@ if __name__ == '__main__':
     VIRTUAL_ENV_VAR = str(sys.argv[4])
     ENVS_PATH = str(sys.argv[5])
 
+    if arg_2 == "__none__":
+        arg_2 = None
+    
+    if arg_3 == "__none__":
+        arg_3 = None
+
     permissions = ('o', 'i', 'a') # inside, outside, anywhere
 
     list_of_commands = operations.list_of_commands

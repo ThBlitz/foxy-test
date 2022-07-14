@@ -1,17 +1,38 @@
-import os
-import json
 import datetime
+import time
 
-fox_folder_path = os.path.dirname(os.path.abspath(__file__))
+class Env_Meta:
 
-def fox_settings():
-    return 
+    def __init__(self, env_name, ENV_PATH = None):
+        
+        if ENV_PATH == None:
+            self.env_name = env_name
+            self.created_unix_epoch = time.time()
+            self.total_versions = 0
+            self.versions = [
+                [
+                    time.time(), 
+                    f'virtualenv {env_name}',
+                    '0.0.0'
+                ]
+            ]
+        else:
+            pass
+        return 
 
-def help_():
-    print('no help here')
-    return
+    def add_version(self, package_name, package_version):
 
-def get_time():
-    return time_str
+        self.versions.append(
+            [
+                time.time(),
+                package_name,
+                package_version
+            ]
+        )
+        return 
 
-def 
+    def save_meta(self, env_name):
+        return
+
+    def load_meta(self, ):
+        return 

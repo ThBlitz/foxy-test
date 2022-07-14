@@ -5,6 +5,7 @@ import os
 import shutil
 import sys
 import json
+import get_version
 
 list_of_commands = {
         'info': ('a'),
@@ -12,6 +13,7 @@ list_of_commands = {
         'list_envs': ('a'),
         'env_info': ('i', 'o'),
         'create': ('o'),
+        'install': ('i'),
         'remove': ('o'),
         'clone': ('o'),
         'rename': ('o'),
@@ -118,7 +120,7 @@ def remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         if y_or_n == 'y':
             shutil.rmtree(final_path)
             os.remove(os.path.join(ENVS_PATH, arg_2))
-            
+
         elif y_or_n == None:
             stdout.print_error(2)
 
@@ -151,4 +153,20 @@ def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     else:
         stdout.print_error(1)
     
+    return
+
+def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
+    
+    print(arg_2, arg_3)
+
+    if VIRTUAL_ENV_VAR == None:
+        
+        if arg_3 == None:
+            arg_3 = get_version.get_version(arg_2)
+
+        with open()
+
+    else:
+        stdout.print_error(1)
+
     return

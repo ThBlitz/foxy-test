@@ -28,7 +28,7 @@ fi
 
 workingDirectory=$PWD
 
-. $workingDirectory/path_settings
+. $workingDirectory/path_settings.foxy
 
 if [ -n ${py_envs} ]
 then
