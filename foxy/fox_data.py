@@ -3,21 +3,20 @@ import time
 
 class Env_Meta:
 
-    def __init__(self, env_name, ENV_PATH = None):
+    def __init__(self, env_name):
         
-        if ENV_PATH == None:
-            self.env_name = env_name
-            self.created_unix_epoch = time.time()
-            self.total_versions = 0
-            self.versions = [
-                [
-                    time.time(), 
-                    f'virtualenv {env_name}',
-                    '0.0.0'
-                ]
+        self.env_name = env_name
+        self.created = time.time()
+        self.python_version = sys.version
+        self.total_versions = 0
+        self.versions = [
+            [
+                time.time(), 
+                f'virtualenv {env_name}',
+                '0.0.0'
             ]
-        else:
-            pass
+        ]
+        
         return 
 
     def add_version(self, package_name, package_version):
@@ -29,10 +28,17 @@ class Env_Meta:
                 package_version
             ]
         )
+        self.total_versions = len(self.versions) - 1
         return 
 
-    def save_meta(self, env_name):
-        return
+    def json(self):
 
-    def load_meta(self, ):
-        return 
+        return {
+            'env_name':self.env_name,
+            'created':self.created,
+            'python_version':self.python_version,
+            'total_versions':self.total_versions,
+            'versions':self.versions
+        }
+
+

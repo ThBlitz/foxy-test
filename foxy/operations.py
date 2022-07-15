@@ -5,7 +5,8 @@ import os
 import shutil
 import sys
 import json
-import get_version
+import get_versions
+import fox_data
 
 list_of_commands = {
         'info': ('a'),
@@ -79,26 +80,15 @@ def create(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
                 shell=True, stdout=subprocess.PIPE
             ).stdout.decode('utf-8')
             
-            env_meta = {
-                'env_name':arg_2,
-                'python_version':sys.version,
-                'total_versions':0,
-                'versions':[
-                    {
-                        'created': time.time(),
-                        'created_unix_epoch':time.time(),
-                        'pip_list': [None]
-                    }
-                ]
-            }
+            env_meta = fox_data.Env_Meta(arg_2)
 
             final_path = os.path.join(final_path, 'env_meta.json')
 
             with open(final_path, 'w') as f:
-                json.dump(env_meta, f, indent = 4)
+                json.dump(env_meta.json, f, indent = 4)
             
             with open(os.path.join(ENVS_PATH, f'{arg_2}.json'), 'w') as f:
-                json.dump(env_meta, f, indent = 4)
+                json.dump(env_meta.json, f, indent = 4)
 
             ####################
             print(output)
@@ -162,9 +152,7 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     if VIRTUAL_ENV_VAR == None:
         
         if arg_3 == None:
-            arg_3 = get_version.get_version(arg_2)
-
-        with open()
+            arg_3 = get_versions.get_version(arg_2)
 
     else:
         stdout.print_error(1)
