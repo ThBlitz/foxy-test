@@ -152,7 +152,17 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     if VIRTUAL_ENV_VAR == None:
         
         if arg_3 == None:
+            pip_command = ['pip', 'install', arg_2]
             arg_3 = get_versions.get_version(arg_2)
+        else:
+            pip_command = ['pip', 'install', f'{arg_2}=={arg_3}']
+        
+        subprocess.run(pip_command)
+
+        with open(os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'), 'r') as file:
+            env_meta = json.load(file)
+
+        print(env_meta)
 
     else:
         stdout.print_error(1)

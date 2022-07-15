@@ -1,21 +1,26 @@
 import datetime
 import time
+import os
 
 class Env_Meta:
 
     def __init__(self, env_name):
         
-        self.env_name = env_name
-        self.created = time.time()
-        self.python_version = sys.version
-        self.total_versions = 0
-        self.versions = [
-            [
-                time.time(), 
-                f'virtualenv {env_name}',
-                '0.0.0'
+        if isinstance(env_name, str):
+            self.env_name = env_name
+            self.created = time.time()
+            self.python_version = sys.version
+            self.total_versions = 0
+            self.versions = [
+                [
+                    time.time(), 
+                    f'virtualenv {env_name}',
+                    '0.0.0'
+                ]
             ]
-        ]
+
+        elif isinstance(env_name, os.path):
+            print('load env_meta from json file (implementation needed)')
         
         return 
 
