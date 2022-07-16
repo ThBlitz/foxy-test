@@ -17,6 +17,10 @@ error_messages = {
     3: [
         'required arguments are missing (error 3)',
         'enter the right arguments'
+    ],
+    4: [
+        'permission denied (error 4)',
+        'enter a env and then try again'
     ]
 
 }

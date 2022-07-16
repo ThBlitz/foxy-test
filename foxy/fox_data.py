@@ -1,12 +1,13 @@
 import datetime
 import time
 import os
+import sys
 
 class Env_Meta:
 
-    def __init__(self, env_name):
+    def __init__(self, env_name, type_ = 'new'):
         
-        if isinstance(env_name, str):
+        if type_ == 'new':
             self.env_name = env_name
             self.created = time.time()
             self.python_version = sys.version
@@ -19,9 +20,15 @@ class Env_Meta:
                 ]
             ]
 
-        elif isinstance(env_name, os.path):
-            print('load env_meta from json file (implementation needed)')
-        
+        elif type_ == 'path':
+            with open(env_name), 'r') as file:
+                env_meta = json.load(file)
+            self.env_name = env_meta['env_name']
+            self.created = env_meta['created']
+            self.python_version = env_meta['python_version']
+            self.total_versions = env_meta['total_versions']
+            self.versions = env_meta['versions']
+
         return 
 
     def add_version(self, package_name, package_version):

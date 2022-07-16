@@ -149,7 +149,7 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     
     print(arg_2, arg_3)
 
-    if VIRTUAL_ENV_VAR == None:
+    if VIRTUAL_ENV_VAR != None:
         
         if arg_3 == None:
             pip_command = ['pip', 'install', arg_2]
@@ -157,12 +157,26 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         else:
             pip_command = ['pip', 'install', f'{arg_2}=={arg_3}']
         
-        subprocess.run(pip_command)
+        # subprocess.run(
+        #     pip_command,
+        #     shell=True, stdout=subprocess.PIPE
+        # )
 
-        with open(os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'), 'r') as file:
-            env_meta = json.load(file)
+        env_meta = fox_data.Env_Meta(
+            os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'), 
+            type_ = 'path'
+        )
 
-        print(env_meta)
+        env_meta.add_version(arg_2, arg_3)
+
+        with open(os.path.join(ENVS_PATH, ), 'w') as f:
+            json.dump(env_meta.json, f, indent = 4)
+            
+        with open(os.path.join(ENVS_PATH, f'{arg_2}.json'), 'w') as f:
+            json.dump(env_meta.json, f, indent = 4)
+
+
+        
 
     else:
         stdout.print_error(1)
