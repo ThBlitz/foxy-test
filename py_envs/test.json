@@ -1,14 +1,18 @@
 {
     "env_name": "test",
+    "created": 1658049869.7872088,
     "python_version": "3.8.13 (default, Jul 10 2022, 15:27:02) \n[GCC 11.3.0]",
-    "total_versions": 0,
+    "total_versions": 1,
     "versions": [
-        {
-            "created": 1657732349.0634973,
-            "created_unix_epoch": 1657732349.0634983,
-            "pip_list": [
-                null
-            ]
-        }
+        [
+            1658049869.7872167,
+            "virtualenv test",
+            "0.0.0"
+        ],
+        [
+            1658050220.1370835,
+            "numpy",
+            "1.23.1"
+        ]
     ]
 }

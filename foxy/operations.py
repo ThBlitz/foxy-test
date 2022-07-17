@@ -22,7 +22,7 @@ list_of_commands = {
         'clone_version': ('o', 'i'),
         'change_version': ('o', 'i'),
         'settings': ('i', 'o')
-    }
+}
 
 env_meta = {
     'env_name':None,
@@ -52,7 +52,6 @@ def commands(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 def list_envs(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     envs_dir_list = get_envs_dir_list(ENVS_PATH)
     envs = [x.name for x in envs_dir_list]
-    stdout.print_info(1)
     stdout.print_messg(envs)
     return 
     
@@ -85,10 +84,10 @@ def create(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
             final_path = os.path.join(final_path, 'env_meta.json')
 
             with open(final_path, 'w') as f:
-                json.dump(env_meta.json, f, indent = 4)
+                json.dump(env_meta.json(), f, indent = 4)
             
             with open(os.path.join(ENVS_PATH, f'{arg_2}.json'), 'w') as f:
-                json.dump(env_meta.json, f, indent = 4)
+                json.dump(env_meta.json(), f, indent = 4)
 
             ####################
             print(output)
@@ -109,7 +108,7 @@ def remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         
         if y_or_n == 'y':
             shutil.rmtree(final_path)
-            os.remove(os.path.join(ENVS_PATH, arg_2))
+            os.remove(os.path.join(ENVS_PATH, f'{arg_2}.json'))
 
         elif y_or_n == None:
             stdout.print_error(2)
@@ -118,7 +117,8 @@ def remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         stdout.print_error(1)
 
 def build(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
-    
+    # create
+    # update
     return 
 
 def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
@@ -131,9 +131,8 @@ def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
                 if final_path in x.path:
                     env_exists = True
                     break
-
             if env_exists:
-                build(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH)
+                create(arg_3, None, VIRTUAL_ENV_VAR, ENVS_PATH)
             else:
                 stdout.print_error(2)
 
@@ -146,21 +145,20 @@ def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     return
 
 def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
-    
-    print(arg_2, arg_3)
 
     if VIRTUAL_ENV_VAR != None:
         
         if arg_3 == None:
-            pip_command = ['pip', 'install', arg_2]
+            pip_command = [f'{VIRTUAL_ENV_VAR}/bin/pip', 'install', arg_2, '--no-cache-dir']
             arg_3 = get_versions.get_version(arg_2)
         else:
-            pip_command = ['pip', 'install', f'{arg_2}=={arg_3}']
-        
-        # subprocess.run(
-        #     pip_command,
-        #     shell=True, stdout=subprocess.PIPE
-        # )
+            pip_command = [f'{VIRTUAL_ENV_VAR}/bin/pip', 'install', f'{arg_2}=={arg_3}', '--no-cache-dir']
+
+        stdout.print_messg(pip_command)
+
+        subprocess.run(
+            pip_command
+        )
 
         env_meta = fox_data.Env_Meta(
             os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'), 
@@ -169,14 +167,9 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 
         env_meta.add_version(arg_2, arg_3)
 
-        with open(os.path.join(ENVS_PATH, ), 'w') as f:
-            json.dump(env_meta.json, f, indent = 4)
-            
-        with open(os.path.join(ENVS_PATH, f'{arg_2}.json'), 'w') as f:
-            json.dump(env_meta.json, f, indent = 4)
-
-
-        
+        env_meta.save(os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'))
+        active_env_name = VIRTUAL_ENV_VAR.split('/')[-1]
+        env_meta.save(os.path.join(ENVS_PATH, f'{active_env_name}.json'))
 
     else:
         stdout.print_error(1)

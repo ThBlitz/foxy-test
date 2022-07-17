@@ -30,10 +30,11 @@ if __name__ == '__main__':
         VIRTUAL_ENV_VAR = None 
 
     if command not in list_of_commands:
-        stdout.print_error(0)
+        if command not in ('activate', 'deactivate'):
+            stdout.print_error(0)
     else:
         eval(f'operations.{command}(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH)')
-        
+    
     
         
 

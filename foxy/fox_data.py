@@ -2,6 +2,7 @@ import datetime
 import time
 import os
 import sys
+import json
 
 class Env_Meta:
 
@@ -21,8 +22,11 @@ class Env_Meta:
             ]
 
         elif type_ == 'path':
-            with open(env_name), 'r') as file:
-                env_meta = json.load(file)
+            print(env_name)
+            env_meta = {}
+            with open(env_name, 'r') as file:
+                dict = json.load(file)
+            env_meta = dict
             self.env_name = env_meta['env_name']
             self.created = env_meta['created']
             self.python_version = env_meta['python_version']
@@ -37,7 +41,7 @@ class Env_Meta:
             [
                 time.time(),
                 package_name,
-                package_version
+                str(package_version)
             ]
         )
         self.total_versions = len(self.versions) - 1
@@ -52,5 +56,12 @@ class Env_Meta:
             'total_versions':self.total_versions,
             'versions':self.versions
         }
+
+    def save(self, path):
+
+        with open(path, 'w') as f:
+            json.dump(self.json(), f, indent = 4)
+
+        return
 
 
