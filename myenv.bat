@@ -24,7 +24,7 @@ if defined arg3 (
 
 if "%arg2%"=="build" (
     if defined arg3 (
-        docker build -t %arg3% -f Envs/%arg3%.Dockerfile Envs
+        docker build -t %arg3%:%arg4% -f Envs/%arg3%.Dockerfile Envs
     )
 )
 

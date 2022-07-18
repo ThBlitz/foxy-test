@@ -22,7 +22,6 @@ class Env_Meta:
             ]
 
         elif type_ == 'path':
-            print(env_name)
             env_meta = {}
             with open(env_name, 'r') as file:
                 dict = json.load(file)

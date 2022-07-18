@@ -13,17 +13,17 @@ fi
 
 if [ -z ${arg2} ]
 then
-    arg2="None"
+    arg2="__none__"
 fi
 
 if [ -z ${arg3} ]
 then
-    arg3="None"
+    arg3="__none__"
 fi
 
 if [ -z ${VIRTUAL_ENV} ]
 then
-    arg4="__none__"
+    VIRTUAL_ENV="__none__"
 fi
 
 workingDirectory=$PWD
@@ -39,14 +39,11 @@ fi
 
 if [ -n ${fox_path} ] && [ -n ${py_exe} ]
 then
-    $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $py_envs
+    $py_exe $fox_path $arg1 $arg2 $arg3 $VIRTUAL_ENV $py_envs
 fi
 
 if [ $arg1 == "activate" ]
 then
-    source $envsPath/$arg2/bin/activate
-elif [ $arg1 == "deactivate" ]
-then
-    deactivate
-fi 
+    source $py_envs/$arg2/bin/activate
+fi
 
