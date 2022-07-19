@@ -85,9 +85,6 @@ def create(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 
             with open(final_path, 'w') as f:
                 json.dump(env_meta.json(), f, indent = 4)
-            
-            with open(os.path.join(ENVS_PATH, f'{arg_2}.json'), 'w') as f:
-                json.dump(env_meta.json(), f, indent = 4)
 
             ####################
             print(output)
@@ -132,7 +129,7 @@ def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
                     env_exists = True
                     break
             if env_exists:
-                create(arg_3, None, VIRTUAL_ENV_VAR, ENVS_PATH)
+                # create(arg_3, None, VIRTUAL_ENV_VAR, ENVS_PATH)
             else:
                 stdout.print_error(2)
 
@@ -168,8 +165,6 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         env_meta.add_version(arg_2, arg_3)
 
         env_meta.save(os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'))
-        active_env_name = VIRTUAL_ENV_VAR.split('/')[-1]
-        env_meta.save(os.path.join(ENVS_PATH, f'{active_env_name}.json'))
 
     else:
         stdout.print_error(1)
