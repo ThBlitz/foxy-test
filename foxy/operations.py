@@ -114,6 +114,14 @@ def remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         stdout.print_error(1)
 
 def build(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
+    # fox build arg_2(new env_name) arg_3(file path)
+
+    if arg_2 != None and arg_3 != None:
+        if arg_3 == '.':
+            #.fox files 
+    else:
+        stdout.print_error(3)
+
     # create
     # update
     return 
