@@ -119,6 +119,7 @@ def build(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     if arg_2 != None and arg_3 != None:
         if arg_3 == '.':
             #.fox files 
+            pass
     else:
         stdout.print_error(3)
 
@@ -137,6 +138,7 @@ def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
                     env_exists = True
                     break
             if env_exists:
+                pass
                 # create(arg_3, None, VIRTUAL_ENV_VAR, ENVS_PATH)
             else:
                 stdout.print_error(2)
@@ -161,9 +163,9 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 
         stdout.print_messg(pip_command)
 
-        subprocess.run(
-            pip_command
-        )
+        # subprocess.run(
+        #     pip_command
+        # )
 
         env_meta = fox_data.Env_Meta(
             os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'), 
@@ -172,7 +174,7 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 
         env_meta.add_version(arg_2, arg_3)
 
-        env_meta.save(os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'))
+        # env_meta.save(os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'))
 
     else:
         stdout.print_error(1)

@@ -77,11 +77,11 @@ class ENV_META:
             self.versions = [
                 [
                     time.time(), 
-                    f'virtualenv {env_name}',
+                    f'virtualenv {self.env_name}',
                     '0.0.0'
                 ]
             ]
-    return
+        return
             
     def __initialize(self, env_data):
         self.env_name = env_data['env_name']
@@ -165,8 +165,9 @@ class ENV_CLASS:
     def is_active(self):
         if self.VIRTUAL_ENV_VAR != None:
             env_name = os.path.basename(self.VIRTUAL_ENV_VAR)
-            if self.env_exists(env_name) and self.env_meta.env_name == env_name:
-                return True
+            if self.env_meta != None:
+                if self.env_exists(env_name) and self.env_meta.env_name == env_name:
+                    return True
         return False
 
-            
+
