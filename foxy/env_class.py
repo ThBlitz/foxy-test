@@ -112,9 +112,11 @@ class ENV_META:
     def export(self, path):
         lines = []
         lines.append(f'create {self.env_name}')
-        for time, package, version in self.versions:
+        for time, package, version in self.versions[1:]:
             lines.append(f'install {package} {version}')
         
+        path = os.path.join(path, f'{self.env_name}.fox')
+
         with open(path, 'w') as f:
             for line in lines:
                 f.write(f"{line}\n")

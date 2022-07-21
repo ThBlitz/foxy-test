@@ -172,6 +172,13 @@ def install(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
             type_ = 'path'
         )
 
+        import env_class 
+        env_obj = env_class.ENV_CLASS(VIRTUAL_ENV_VAR, ENVS_PATH)
+        env_obj.initialize()
+        print(env_obj.is_active())
+        print(env_obj.is_active())
+        env_obj.env_meta.export(ENVS_PATH)
+
         env_meta.add_version(arg_2, arg_3)
 
         # env_meta.save(os.path.join(VIRTUAL_ENV_VAR, 'env_meta.json'))
