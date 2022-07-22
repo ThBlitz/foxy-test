@@ -3,6 +3,8 @@ import os
 import stdout
 import operations
 import env_class
+import parser
+from collections import defaultdict
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -17,12 +19,19 @@ if __name__ == '__main__':
     PWD = arguments[-3]
     VIRTUAL_ENV_VAR = arguments[-2]
     ENVS_PATH = arguments[-1]
-    command = arguments[0]
+    
+    print(arguments)
+
+    args = []
+    for arg in arguments[:-3]:
+        if arg == None:
+            break
+        args.append(arg)
+    print(args)
+    args_obj = parser.Arguments(args)
+    print(args_obj.validate_arguments())
 
     env_obj = env_class.ENV_CLASS(VIRTUAL_ENV_VAR, ENVS_PATH, PWD)
-    
-    import parser 
-    pp = parser.Parse_Arguments(arguments)
 
     permissions = ('o', 'i', 'a') # inside, outside, anywhere
 
