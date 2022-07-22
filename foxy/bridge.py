@@ -4,7 +4,7 @@ import stdout
 import operations
 import env_class
 import parser
-from collections import defaultdict
+from collections import defaultdict, deque
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,17 +19,30 @@ if __name__ == '__main__':
     PWD = arguments[-3]
     VIRTUAL_ENV_VAR = arguments[-2]
     ENVS_PATH = arguments[-1]
-    
-    print(arguments)
 
     args = []
     for arg in arguments[:-3]:
         if arg == None:
             break
         args.append(arg)
-    print(args)
+    
     args_obj = parser.Arguments(args)
     print(args_obj.validate_arguments())
+    # queue = deque()
+    # queue.append(root)
+    # queue.append(None)
+
+    # while queue[0] != None:
+    #     node = queue.popleft()
+    #     for x in node.fetch_linked_nodes():
+    #         queue.append(x)
+
+    #     if queue[0] == None:
+    #         queue.popleft()
+    #         print([x.arg for x in queue])
+    #         queue.append(None)
+        
+    # parser.Arguments_Tree.closest_args(args_obj.arg_tree, args)
 
     env_obj = env_class.ENV_CLASS(VIRTUAL_ENV_VAR, ENVS_PATH, PWD)
 

@@ -5,10 +5,14 @@
 arg1=$1
 arg2=$2
 arg3=$3
+arg4=$4
+arg5=$5
+arg6=$6
+arg7=$7
 
 if [ -z ${arg1} ]
 then
-    arg1="info"
+    arg1="__none__"
 fi
 
 if [ -z ${arg2} ]
@@ -19,6 +23,26 @@ fi
 if [ -z ${arg3} ]
 then
     arg3="__none__"
+fi
+
+if [ -z ${arg4} ]
+then
+    arg4="__none__"
+fi
+
+if [ -z ${arg5} ]
+then
+    arg5="__none__"
+fi
+
+if [ -z ${arg6} ]
+then
+    arg6="__none__"
+fi
+
+if [ -z ${arg7} ]
+then
+    arg7="__none__"
 fi
 
 if [ -z ${VIRTUAL_ENV} ]
@@ -39,7 +63,7 @@ fi
 
 if [ -n ${fox_path} ] && [ -n ${py_exe} ]
 then
-    $py_exe $fox_path $arg1 $arg2 $arg3 $VIRTUAL_ENV $py_envs
+    $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $PWD $VIRTUAL_ENV $py_envs
 fi
 
 if [ $arg1 == "activate" ]
