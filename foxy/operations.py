@@ -9,19 +9,19 @@ import get_versions
 import fox_data
 
 list_of_commands = {
-        'info': ('a'),
-        'commands': ('a'),
-        'list_envs': ('a'),
-        'env_info': ('i', 'o'),
-        'create': ('o'),
-        'install': ('i'),
-        'remove': ('o'),
-        'clone': ('o'),
-        'rename': ('o'),
-        'list_versions': ('o', 'i'),
-        'clone_version': ('o', 'i'),
-        'change_version': ('o', 'i'),
-        'settings': ('i', 'o')
+    'info': ('a'),
+    'commands': ('a'),
+    'list_envs': ('a'),
+    'env_info': ('i', 'o'),
+    'create': ('o'),
+    'install': ('i'),
+    'remove': ('o'),
+    'clone': ('o'),
+    'rename': ('o'),
+    'list_versions': ('o', 'i'),
+    'clone_version': ('o', 'i'),
+    'change_version': ('o', 'i'),
+    'settings': ('i', 'o')
 }
 
 env_meta = {

@@ -2,25 +2,27 @@ import sys
 import os
 import stdout
 import operations
+import env_class
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-
-
-
 if __name__ == '__main__':
 
-    command = str(sys.argv[1])
-    arg_2 = str(sys.argv[2])
-    arg_3 = str(sys.argv[3])
-    VIRTUAL_ENV_VAR = str(sys.argv[4])
-    ENVS_PATH = str(sys.argv[5])
-
-    if arg_2 == "__none__":
-        arg_2 = None
+    arguments = [None] * 10
+    for i in range(1, 11):
+        arg = str(sys.argv[i])
+        if arg != '__none__':
+            arguments[i - 1] = arg
     
-    if arg_3 == "__none__":
-        arg_3 = None
+    PWD = arguments[-3]
+    VIRTUAL_ENV_VAR = arguments[-2]
+    ENVS_PATH = arguments[-1]
+    command = arguments[0]
+
+    env_obj = env_class.ENV_CLASS(VIRTUAL_ENV_VAR, ENVS_PATH, PWD)
+    
+    import parser 
+    pp = parser.Parse_Arguments(arguments)
 
     permissions = ('o', 'i', 'a') # inside, outside, anywhere
 

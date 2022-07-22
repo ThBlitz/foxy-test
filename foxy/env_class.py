@@ -115,7 +115,7 @@ class ENV_META:
         for time, package, version in self.versions[1:]:
             lines.append(f'install {package} {version}')
         
-        path = os.path.join(path, f'{self.env_name}.fox')
+        path = os.path.join(path, f'{self.env_name}.foxy')
 
         with open(path, 'w') as f:
             for line in lines:
@@ -138,9 +138,10 @@ class ENV_META:
 
 class ENV_CLASS:
 
-    def __init__(self, VIRTUAL_ENV_VAR, ENVS_PATH):
+    def __init__(self, VIRTUAL_ENV_VAR, ENVS_PATH, PWD):
         self.ENVS_PATH = ENVS_PATH
         self.VIRTUAL_ENV_VAR = VIRTUAL_ENV_VAR
+        self.PWD = PWD
         self.env_meta = None
 
     def env_exists(self, env_name):
