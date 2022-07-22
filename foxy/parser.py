@@ -10,6 +10,7 @@ args_to_operations = {
     'create <env_name> overwrite': ('o', 'create'),
     'remove <env_name>': ('o', 'remove'),
     'install <package_name> <package_version>': ('i', 'install'),
+    'install <package_name>': ('i', 'install'),
     'list versions': ('i', 'list_versions'),
     'clone <current_env> to <new_env>': ('o', 'clone'),
     'clone <new_env> from <current_env>': ('o', 'clone'),
@@ -75,10 +76,43 @@ class Args_Tree:
         
         if len(args) == 0:
             return node.end
-        print(node.list_links(), args[0])
+        
         if node.link_exists(args[0]):
             return Args_Tree.validate_tree(node.next_node(args[0]), args[1:])
         return False
+
+    def closest_tree(node, args):
+
+        def recur(node, args, closest = []):
+            if len(args) == 0:
+                return node, closest
+            if node.link_exists(args[0]):
+                closest.append(args[0])
+                return recur(node.next_node(args[0]), args[1:], closest)
+            return node, closest
+        
+        closest = []
+        node, close = recur(node, args)
+        queue = deque()
+        queue.append((node, 0))
+        res = []
+        while queue:
+            node, level = queue.popleft()
+            res.append((node.arg_name, level))
+            for x in node.fetch_linked_nodes():
+                queue.append((x, level + 1))
+        
+        max_levels = res[-1][-1]
+        stdout_levels = [[] for _ in range(max_levels)]
+        for continuation, level in res[1:]:
+            stdout_levels[level - 1].append(continuation)
+        
+        for i in range(max_levels):
+            stdout_levels[i] = '/'.join(stdout_levels[i])
+        
+        stdout = close + stdout_levels
+        stdout = '- fox ' + ' '.join(stdout)
+        print(stdout)
 
 
 class Arguments_Tree:

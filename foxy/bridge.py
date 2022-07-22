@@ -28,6 +28,7 @@ if __name__ == '__main__':
     
     args_obj = parser.Arguments(args)
     print(args_obj.validate_arguments())
+    parser.Args_Tree.closest_tree(args_obj.arg_tree, args)
     # queue = deque()
     # queue.append(root)
     # queue.append(None)
