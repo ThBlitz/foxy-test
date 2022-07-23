@@ -93,26 +93,23 @@ class Args_Tree:
         
         closest = []
         node, close = recur(node, args)
-        queue = deque()
-        queue.append((node, 0))
+        stack = deque()
+        stack.append((node, 0))
         res = []
-        while queue:
-            node, level = queue.popleft()
-            res.append((node.arg_name, level))
+        temp = [(None, 0)]
+        while stack:
+            node, level = stack.pop()
+            if temp[-1][1] > level:
+                for _ in range(level):
+                    temp.pop()
+            temp.append((node.arg_name, level))
+            if node.end == True:
+                res.append([x[0] for x in temp[1:]])
             for x in node.fetch_linked_nodes():
-                queue.append((x, level + 1))
-        
-        max_levels = res[-1][-1]
-        stdout_levels = [[] for _ in range(max_levels)]
-        for continuation, level in res[1:]:
-            stdout_levels[level - 1].append(continuation)
-        
-        for i in range(max_levels):
-            stdout_levels[i] = '/'.join(stdout_levels[i])
-        
-        stdout = close + stdout_levels
-        stdout = '- fox ' + ' '.join(stdout)
-        print(stdout)
+                stack.append((x, level + 1))
+            
+
+        print(res)
 
 
 class Arguments_Tree:
