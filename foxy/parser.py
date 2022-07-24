@@ -1,4 +1,5 @@
 from collections import defaultdict, deque
+import stdout
 
 args_to_operations = {
     'info': ('', 'info'),
@@ -21,6 +22,121 @@ args_to_operations = {
     'build <file_path> to <env_name>': ('o', 'build'),
     'build <env_name> from <file_path>': ('o', 'build')
 }
+
+
+class args_Node:
+
+    def __init__(self, arg = None):
+        self.arg = arg
+        self.value = None
+        self.normal_children = defaultdict(self.__default)
+        self.special_children = defaultdict(self.__default)
+        self.end_node = False
+        self.method = None
+        self.parent = None
+        self.special = False
+
+    def __default(self):
+        return None
+
+class args_Tree:
+
+    def __init__(self):
+        self.root = self.create_node('fox')
+
+    def create_node(self, arg = None):
+        return args_Node(arg = arg)
+    
+    def add(self, args_list):
+
+        def recur(node, args):
+           
+            if len(args) == 0:
+                node.end_node = True
+                return 
+
+            if args[0][0] == '<' and args[0][-1] == '>':
+                if args[0] not in node.special_children:
+                    node.special_children[args[0]] = self.create_node(args[0])
+                    node.special_children[args[0]].parent = node
+                    node.special_children[args[0]].special = True
+                recur(node.special_children[args[0]], args[1:])
+            else:
+                if args[0] not in node.normal_children:
+                    node.normal_children[args[0]] = self.create_node(args[0])
+                    node.normal_children[args[0]].parent = node
+                recur(node.normal_children[args[0]], args[1:])
+            return
+
+        recur(self.root, args_list)
+        return
+    
+    def validate(self, args_list):
+
+        def recur(node, args):
+
+            if len(args) == 0:
+                return node.end_node
+            
+            validation = False
+            if args[0] in node.normal_children:
+                validation = recur(node.normal_children[args[0]], args[1:])
+            else:
+                for special_arg in node.special_children:
+                    validation = validation or recur(node.special_children[special_arg], args[1:])
+
+            return validation
+
+        return recur(self.root, args_list)
+
+    def recommend(self, args_list):
+
+        self.res = []
+
+        def validate_upto(node, args, correct_args):
+        
+            if len(args) == 0:
+                self.res.append((node, correct_args))
+                return
+            
+            if args[0] in node.normal_children:
+                correct_args.append(args[0])
+                validate_upto(node.normal_children[args[0]], args[1:], correct_args)
+                return 
+            elif len(node.special_children) != 0:
+                for special_arg in node.special_children:
+                    corr = correct_args[:]
+                    corr.append(special_arg)
+                    validate_upto(node.special_children[special_arg], args[1:], corr)
+                return 
+
+            self.res.append((node, correct_args))
+
+        validate_upto(self.root, args_list, correct_args = [])
+
+        max_len = max([len(x[1]) for x in self.res])
+        for x in self.res:
+            if len(x[1]) != max_len:
+                self.res.remove(x)
+
+        def recur(node, correct_args, temp = []):
+            if node.end_node:
+                self.recommends.append(correct_args + temp)
+
+            for arg in node.normal_children:
+                recur(node.normal_children[arg], correct_args, temp + [arg])
+            for s_arg in node.special_children:
+                recur(node.special_children[s_arg], correct_args, temp + [s_arg])
+            return
+
+        self.recommends = []  
+        for node, correct_args in self.res:
+            recur(node, correct_args)
+        
+        stdout.print_messg(['suggestions ...'])
+        stdout.print_messg(self.recommends, lambda x: 'fox ' + ' '.join(x))
+        
+
 
 class Args_Tree:
 

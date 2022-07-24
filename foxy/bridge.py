@@ -26,9 +26,15 @@ if __name__ == '__main__':
             break
         args.append(arg)
     
-    args_obj = parser.Arguments(args)
-    print(args_obj.validate_arguments())
-    parser.Args_Tree.closest_tree(args_obj.arg_tree, args)
+    arg_tree = parser.args_Tree()
+    for arg in parser.args_to_operations:
+        arg = arg.split(' ')
+        arg_tree.add(arg)
+
+    validity = arg_tree.validate(args)
+    
+    arg_tree.recommend(args) if validity == False else None
+
     # queue = deque()
     # queue.append(root)
     # queue.append(None)
