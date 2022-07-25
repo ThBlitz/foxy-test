@@ -1,28 +1,6 @@
 from collections import defaultdict, deque
 import stdout
 
-args_to_operations = {
-    'info': ('', 'info'),
-    'commands': ('', 'commands'),
-    'list envs': ('', 'list_envs'),
-    'env info': ('i', 'env_info'),
-    'info <env_name>': ('', 'env_info'),
-    'create <env_name>': ('o', 'create'),
-    'create <env_name> overwrite': ('o', 'create'),
-    'remove <env_name>': ('o', 'remove'),
-    'install <package_name> <package_version>': ('i', 'install'),
-    'install <package_name>': ('i', 'install'),
-    'list versions': ('i', 'list_versions'),
-    'clone <current_env> to <new_env>': ('o', 'clone'),
-    'clone <new_env> from <current_env>': ('o', 'clone'),
-    'clone <current_env> upto version <version_number> as <new_env>': ('o', 'clone'),
-    'clone <new_env> upto version <version_number> from <current_env>': ('o', 'clone'),
-    'rename <current_name> as <new_name>': ('o', 'rename'),
-    'export <file_name>': ('', 'export'),
-    'build <file_path> to <env_name>': ('o', 'build'),
-    'build <env_name> from <file_path>': ('o', 'build')
-}
-
 
 class args_Node:
 
@@ -47,12 +25,13 @@ class args_Tree:
     def create_node(self, arg = None):
         return args_Node(arg = arg)
     
-    def add(self, args_list):
+    def add(self, args_list, method):
 
         def recur(node, args):
            
             if len(args) == 0:
                 node.end_node = True
+                node.method = method
                 return 
 
             if args[0][0] == '<' and args[0][-1] == '>':
@@ -133,9 +112,31 @@ class args_Tree:
         for node, correct_args in self.res:
             recur(node, correct_args)
         
-        stdout.print_messg(['suggestions ...'])
-        stdout.print_messg(self.recommends, lambda x: 'fox ' + ' '.join(x))
+        self.res = []
+        return self.recommends
         
+    def extract_args(self, args_list):
+
+        self.args_ = None
+
+        def recur(node, args, temp = []):
+
+            if len(args) == 0:
+                self.args_ = (node.method, temp)
+                return
+            
+            if args[0] in node.normal_children:
+                recur(node.normal_children[args[0]], args[1:], temp)
+            else:
+                for s_arg in node.special_children:
+                    recur(node.special_children[s_arg], args[1:], temp + [args[0]])
+            
+            return 
+        
+        recur(self.root, args_list)
+        res = self.args_
+        self.args_ = None
+        return res
 
 
 class Args_Tree:

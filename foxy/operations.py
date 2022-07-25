@@ -8,56 +8,67 @@ import json
 import get_versions
 import fox_data
 
-list_of_commands = {
-    'info': ('a'),
-    'commands': ('a'),
-    'list_envs': ('a'),
-    'env_info': ('i', 'o'),
-    'create': ('o'),
-    'install': ('i'),
-    'remove': ('o'),
-    'clone': ('o'),
-    'rename': ('o'),
-    'list_versions': ('o', 'i'),
-    'clone_version': ('o', 'i'),
-    'change_version': ('o', 'i'),
-    'settings': ('i', 'o')
+args_to_operations = {
+    'info': ('', 'info'),
+    'commands': ('', 'commands'),
+    'list envs': ('', 'list_envs'),
+    'env info': ('i', 'env_info'),
+    'info <env_name>': ('', 'env_info_outside'),
+    'info <env_name> more': ('', 'env_info_outside_more'),
+    'create <env_name>': ('o', 'create'),
+    'create <env_name> overwrite': ('o', 'create'),
+    'remove <env_name>': ('o', 'remove'),
+    'install <package_name> <package_version>': ('i', 'install'),
+    'install <package_name>': ('i', 'install'),
+    'list versions': ('i', 'list_versions'),
+    'clone <current_env> to <new_env>': ('o', 'clone'),
+    'clone <new_env> from <current_env>': ('o', 'clone'),
+    'clone <current_env> upto version <version_number> as <new_env>': ('o', 'clone'),
+    'clone <new_env> upto version <version_number> from <current_env>': ('o', 'clone'),
+    'rename <current_name> as <new_name>': ('o', 'rename'),
+    'export <file_name>': ('', 'export'),
+    'build <file_path> to <env_name>': ('o', 'build'),
+    'build <env_name> from <file_path>': ('o', 'build')
 }
 
-env_meta = {
-    'env_name':None,
-    'python_version':None,
-    'total_versions':0,
-    'versions':[
-        {
-            'created': None,
-            'created_unix_epoch':None,
-            'pip_list': [None]
-        }
-    ]
-}
 
-def get_envs_dir_list(ENVS_PATH):
-    envs_dir_list = set([x for x in os.scandir(ENVS_PATH) if x.is_dir() ])
-    return envs_dir_list
-
-def info(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
+def info(env_obj, args, arg_tree, user_args):
     stdout.print_info(0)
     return
 
-def commands(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
-    stdout.print_messg(list_of_commands.keys(), lambda x: 'fox ' + x)
+def commands(env_obj, args, arg_tree, user_args):
+    recommends = arg_tree.recommend(['fox'])
+    stdout.print_messg(recommends, lambda x: 'fox ' + ' '.join(x)) 
     return
 
-def list_envs(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
-    envs_dir_list = get_envs_dir_list(ENVS_PATH)
-    envs = [x.name for x in envs_dir_list]
+def list_envs(env_obj, args, arg_tree, user_args):
+    envs = [x.name for x in env_obj.envs_dir_list]
     stdout.print_messg(envs)
     return 
     
-def env_info(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
-    print('needs implementation')
+def env_info(env_obj, args, arg_tree, user_args):
+    if env_obj.initialize() == True:
+        if len(args) == 0:
+            env_obj.env_meta.stdout_info()
+        elif args[0] == 'more':
+            env_obj.env_meta.stdout_info('versions')
     return
+
+def env_info_outside(env_obj, args, arg_tree, user_args):
+    if env_obj.env_exists(args[0]):
+        env_obj.initialize(args[0])
+        if len(args) == 1:
+            env_obj.env_meta.stdout_info()
+        elif args[1] == 'more':
+            env_obj.env_meta.stdout_info('versions')
+    else:
+        stdout.print_error(2)
+    return
+
+def env_info_outside_more(env_obj, args, arg_tree, user_args):
+    args.append('more')
+    env_info_outside(env_obj, args, arg_tree, user_args)
+    return 
 
 def create(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     

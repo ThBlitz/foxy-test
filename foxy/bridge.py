@@ -16,55 +16,45 @@ if __name__ == '__main__':
         if arg != '__none__':
             arguments[i - 1] = arg
     
+    __EXIT__ = False
+
     PWD = arguments[-3]
     VIRTUAL_ENV_VAR = arguments[-2]
     ENVS_PATH = arguments[-1]
 
-    args = []
+    user_args = []
     for arg in arguments[:-3]:
         if arg == None:
             break
-        args.append(arg)
+        user_args.append(arg)
     
     arg_tree = parser.args_Tree()
-    for arg in parser.args_to_operations:
+    for arg in operations.args_to_operations:
+        method = operations.args_to_operations[arg]
         arg = arg.split(' ')
-        arg_tree.add(arg)
+        arg_tree.add(arg, method)
 
-    validity = arg_tree.validate(args)
+    validity = arg_tree.validate(user_args)
     
-    arg_tree.recommend(args) if validity == False else None
-
-    # queue = deque()
-    # queue.append(root)
-    # queue.append(None)
-
-    # while queue[0] != None:
-    #     node = queue.popleft()
-    #     for x in node.fetch_linked_nodes():
-    #         queue.append(x)
-
-    #     if queue[0] == None:
-    #         queue.popleft()
-    #         print([x.arg for x in queue])
-    #         queue.append(None)
-        
-    # parser.Arguments_Tree.closest_args(args_obj.arg_tree, args)
-
-    env_obj = env_class.ENV_CLASS(VIRTUAL_ENV_VAR, ENVS_PATH, PWD)
-
-    permissions = ('o', 'i', 'a') # inside, outside, anywhere
-
-    list_of_commands = operations.list_of_commands
+    if validity == False:
+        stdout.print_error(0)
+        recommends = arg_tree.recommend(user_args)[:6]
+        recommends = [' fox ' + ' '.join(x) for x in recommends]
+        stdout.print_messg(['suggestions ...'] + recommends, lambda x:x, False, True) 
+        __EXIT__ = True
     
-    if VIRTUAL_ENV_VAR == "__none__":
-        VIRTUAL_ENV_VAR = None 
 
-    if command not in list_of_commands:
-        if command not in ('activate', 'deactivate'):
-            stdout.print_error(0)
-    else:
-        eval(f'operations.{command}(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH)')
+    if __EXIT__ == False:
+        method, args = arg_tree.extract_args(user_args)
+        permission, operation = method[0], method[1]
+        env_obj = env_class.ENV(VIRTUAL_ENV_VAR, ENVS_PATH, PWD)
+        if permission == 'o' and env_obj.is_active() == True:
+            stdout.print_error(1)
+        elif permission == 'i' and env_obj.is_active() == False:
+            stdout.print_error(4)
+        else:
+            eval(f'operations.{operation}(env_obj, args, arg_tree, user_args)')
+
     
     
         
