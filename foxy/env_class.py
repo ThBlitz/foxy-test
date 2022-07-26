@@ -100,6 +100,7 @@ class ENV:
         self.PWD = PWD
         self.env_meta = None
         self.envs_dir_list = set([x for x in os.scandir(ENVS_PATH) if x.is_dir()])
+        self.envs_list = set([x.name for x in self.envs_dir_list])
 
     def env_exists(self, env_name):
         path = os.path.join(self.ENVS_PATH, env_name)
@@ -112,7 +113,7 @@ class ENV:
         if self.VIRTUAL_ENV_VAR != None:
             active_env_name = os.path.basename(self.VIRTUAL_ENV_VAR)
             if self.env_exists(active_env_name):
-                return env_name
+                return active_env_name
         return False
 
     def initialize(self, env_name = None):
@@ -120,7 +121,10 @@ class ENV:
         if env_name != False:
             self.env_meta = ENV_META()
             meta_file_path = os.path.join(self.ENVS_PATH, env_name, 'env_meta.json')
-            self.env_meta.load(meta_file_path)
+            if env_name in self.envs_list:
+                self.env_meta.load(meta_file_path)
+            else:
+                self.env_meta.env_name = env_name
             return True
         return False
 

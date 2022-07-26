@@ -48,7 +48,7 @@ if __name__ == '__main__':
         method, args = arg_tree.extract_args(user_args)
         permission, operation = method[0], method[1]
         env_obj = env_class.ENV(VIRTUAL_ENV_VAR, ENVS_PATH, PWD)
-        if permission == 'o' and env_obj.is_active() == True:
+        if permission == 'o' and env_obj.is_active() != False:
             stdout.print_error(1)
         elif permission == 'i' and env_obj.is_active() == False:
             stdout.print_error(4)

@@ -25,6 +25,10 @@ error_messages = {
     5: [
         'invalid entry of arguments (error 5)',
         'The scope for the entered argument cannot be found'
+    ],
+    6: [
+        'specified env already exists (error 6)',
+        'enter new env name or use the command `fox create <env> overwrite` to overwrite the existing env'
     ]
 
 }
