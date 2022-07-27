@@ -21,6 +21,7 @@ if __name__ == '__main__':
     PWD = arguments[-3]
     VIRTUAL_ENV_VAR = arguments[-2]
     ENVS_PATH = arguments[-1]
+    arguments[0] = 'commands' if arguments[0] == None else arguments[0]
 
     user_args = []
     for arg in arguments[:-3]:
@@ -38,7 +39,7 @@ if __name__ == '__main__':
     
     if validity == False:
         stdout.print_error(0)
-        recommends = arg_tree.recommend(user_args)[:6]
+        recommends = arg_tree.recommend(user_args)[:4]
         recommends = [' fox ' + ' '.join(x) for x in recommends]
         stdout.print_messg(['suggestions ...'] + recommends, lambda x:x, False, True) 
         __EXIT__ = True

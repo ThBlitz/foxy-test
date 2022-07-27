@@ -25,7 +25,6 @@ args_to_operations = {
     'clone <new_env> from <current_env>': ('o', 'clone'),
     'clone <current_env> upto version <version_number> as <new_env>': ('o', 'clone'),
     'clone <new_env> upto version <version_number> from <current_env>': ('o', 'clone'),
-    'rename <current_name> as <new_name>': ('o', 'rename'),
     'export <file_name>': ('', 'export'),
     'build <file_path> to <env_name>': ('o', 'build'),
     'build <env_name> from <file_path>': ('o', 'build')
@@ -212,7 +211,18 @@ def install__DEAD__(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
 
     return
  
+## IMPLEMENTATION LATER
+def _rename_(current_name, new_name, envs_path):
+    os.rename(os.path.join(envs_path, current_name), os.path.join(envs_path, new_name))
+    return
 
+def rename(env_obj, args, arg_tree, user_args):
+    _rename_(args[0], args[1], env_obj.ENVS_PATH)
+    return
+
+def _clone_(current_env, new_env):
+    
+    return
 
 def build(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
     # fox build arg_2(new env_name) arg_3(file path)
