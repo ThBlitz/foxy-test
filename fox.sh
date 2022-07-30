@@ -61,13 +61,13 @@ else
     py_envs=$workingDirectory
 fi
 
-if [ -n ${fox_path} ] && [ -n ${py_exe} ]
+if [ $arg1 == "activate" ] && [$arg2 != "__none__"]
+then
+    source $py_envs/$arg2/bin/activate
+elif [ -n ${fox_path} ] && [ -n ${py_exe} ]
 then
     $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $PWD $VIRTUAL_ENV $py_envs
 fi
 
-if [ $arg1 == "activate" ]
-then
-    source $py_envs/$arg2/bin/activate
-fi
+
 

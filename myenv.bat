@@ -32,6 +32,7 @@ if "%arg2%"=="run" (
         
     echo image name     : %arg3%
     echo container name : %containerName%
+    echo pwd            : %cd%
 
     docker run --rm -d -t --name=%containerName% ^
     -p 8888:8888 -p 3000:3000 ^
