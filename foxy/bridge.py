@@ -1,10 +1,9 @@
 import sys
 import os
 import stdout
-import operations
+import args_dictionary
 import env_class
 import parser
-from collections import defaultdict, deque
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -30,8 +29,8 @@ if __name__ == '__main__':
         user_args.append(arg)
     
     arg_tree = parser.args_Tree()
-    for arg in operations.args_to_operations:
-        method = operations.args_to_operations[arg]
+    for arg in args_dictionary.args_to_operations:
+        method = args_dictionary.args_to_operations[arg]
         arg = arg.split(' ')
         arg_tree.add(arg, method)
 
@@ -54,7 +53,14 @@ if __name__ == '__main__':
         elif permission == 'i' and env_obj.is_active() == False:
             stdout.print_error(4)
         else:
-            eval(f'operations.{operation}(env_obj, args, arg_tree, user_args)')
+            Operation_Arguments = {
+                'env_obj': env_obj,
+                'args': args,
+                'arg_tree': arg_tree,
+                'user_args': user_args
+            }
+            operation(Operation_Arguments)
+            # eval(f'operations.{operation}(env_obj, args, arg_tree, user_args)')
 
     
     

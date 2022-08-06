@@ -3,54 +3,37 @@ import time
 import subprocess
 import os
 import shutil
-import sys
-import json
 import get_versions
 import fox_data
 
-args_to_operations = {
-    'info': ('', 'info'),
-    'commands': ('', 'commands'),
-    'list envs': ('', 'list_envs'),
-    'env info': ('i', 'env_info'),
-    'env info more': ('i', 'env_info_more'),
-    'info <env_name>': ('', 'env_info_outside'),
-    'info <env_name> more': ('', 'env_info_outside_more'),
-    'create <env_name>': ('o', 'create'),
-    'create <env_name> overwrite': ('o', 'create_overwrite'),
-    'remove <env_name>': ('o', 'remove'),
-    'install <package_name> <package_version>': ('i', 'install'),
-    'install <package_name>': ('i', 'install'),
-    'clone <current_env> to <new_env>': ('o', 'clone'),
-    'clone <new_env> from <current_env>': ('o', 'clone'),
-    'clone <current_env> upto version <version_number> as <new_env>': ('o', 'clone'),
-    'clone <new_env> upto version <version_number> from <current_env>': ('o', 'clone'),
-    'export <file_name>': ('', 'export'),
-    'build <file_path> to <env_name>': ('o', 'build'),
-    'build <env_name> from <file_path>': ('o', 'build')
-}
+# env_obj, args, arg_tree, user_args
+# args = {
+#         'env_obj': env_obj,
+#         'args': args,
+#         'arg_tree': arg_tree,
+#         'user_args': user_args
+#     }
 
-
-def info(env_obj, args, arg_tree, user_args):
-    stdout.print_info(0)
-    return
-
-def commands(env_obj, args, arg_tree, user_args):
-    recommends = arg_tree.recommend(['fox'])
+def commands(args):
+    recommends = args['arg_tree'].recommend(['fox'])
     stdout.print_messg(recommends, lambda x: 'fox ' + ' '.join(x)) 
     return
 
-def list_envs(env_obj, args, arg_tree, user_args):
-    envs = [x.name for x in env_obj.envs_dir_list]
+def info(args):
+    stdout.print_info(0)
+    return
+
+def list_envs(args):
+    envs = [x.name for x in args['env_obj'].envs_dir_list]
     stdout.print_messg(envs)
     return 
 
-def env_info(env_obj, args, arg_tree, user_args):
-    if env_obj.initialize() == True:
+def env_info(args):
+    if args['env_obj'].initialize() == True:
         if len(args) == 0:
-            env_obj.env_meta.stdout_info()
+            args['env_obj'].env_meta.stdout_info()
         elif args[0] == 'more':
-            env_obj.env_meta.stdout_info('versions')
+            args['env_obj'].env_meta.stdout_info('versions')
     return
 
 def env_info_more(env_obj, args, arg_tree, user_args):
@@ -95,66 +78,12 @@ def create_overwrite(env_obj, args, arg_tree, user_args):
     _create_(env_obj)
     return
 
-def create__DEAD__(env_obj, args, arg_tree, user_args):
-    
-    if VIRTUAL_ENV_VAR == None:
-        final_path = os.path.join(ENVS_PATH, arg_2)
-        y_or_n = None
-        for x in get_envs_dir_list(ENVS_PATH): 
-            if final_path in x.path:
-                y_or_n = stdout.print_prompt(0)
-                break
-
-        if y_or_n == None or y_or_n == 'y': 
-
-            if y_or_n == 'y':
-                remove(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH)
-            
-            output = subprocess.run(
-                f'virtualenv --clear {final_path}',
-                shell=True, stdout=subprocess.PIPE
-            ).stdout.decode('utf-8')
-            
-            env_meta = fox_data.Env_Meta(arg_2)
-
-            final_path = os.path.join(final_path, 'env_meta.json')
-
-            with open(final_path, 'w') as f:
-                json.dump(env_meta.json(), f, indent = 4)
-
-            ####################
-            print(output)
-            ####################
-    else:
-        stdout.print_error(1)
-    return
-
 def remove(env_obj, args, arg_tree, user_args):
     if env_obj.env_exists(args[0]):
         env_obj.initialize(args[0])
         shutil.rmtree(os.path.join(env_obj.ENVS_PATH, args[0]))
     else:
         stdout.print_error(2)
-    
-def remove__DEAD__(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
-
-    if VIRTUAL_ENV_VAR == None:
-        final_path = os.path.join(ENVS_PATH, arg_2)
-        y_or_n = None
-        for x in get_envs_dir_list(ENVS_PATH): 
-            if final_path in x.path:
-                y_or_n = stdout.print_prompt(1)
-                break
-        
-        if y_or_n == 'y':
-            shutil.rmtree(final_path)
-            os.remove(os.path.join(ENVS_PATH, f'{arg_2}.json'))
-
-        elif y_or_n == None:
-            stdout.print_error(2)
-
-    else:
-        stdout.print_error(1)
 
 def install(env_obj, args, arg_tree, user_args):
     pip_command = [f'{env_obj.VIRTUAL_ENV_VAR}/bin/pip', 'install']
