@@ -69,5 +69,3 @@ then
     $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $PWD $VIRTUAL_ENV $py_envs
 fi
 
-
-
