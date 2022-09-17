@@ -1,4 +1,4 @@
-import stdout
+import stdOut
 import time
 import subprocess
 import os
@@ -16,16 +16,16 @@ import fox_data
 
 def commands(args):
     recommends = args['arg_tree'].recommend(['fox'])
-    stdout.print_messg(recommends, lambda x: 'fox ' + ' '.join(x)) 
+    stdOut.print_messg(recommends, lambda x: 'fox ' + ' '.join(x)) 
     return
 
 def info(args):
-    stdout.print_info(0)
+    stdOut.print_info(0)
     return
 
 def list_envs(args):
     envs = [x.name for x in args['env_obj'].envs_dir_list]
-    stdout.print_messg(envs)
+    stdOut.print_messg(envs)
     return 
 
 def env_info(args):
@@ -48,7 +48,7 @@ def env_info_outside(env_obj, args, arg_tree, user_args):
         elif args[1] == 'more':
             env_obj.env_meta.stdout_info('versions')
     else:
-        stdout.print_error(2)
+        stdOut.print_error(2)
     return
 
 def env_info_outside_more(env_obj, args, arg_tree, user_args):
@@ -113,7 +113,7 @@ def install__DEAD__(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
         else:
             pip_command = [f'{VIRTUAL_ENV_VAR}/bin/pip', 'install', f'{arg_2}=={arg_3}', '--no-cache-dir']
 
-        stdout.print_messg(pip_command)
+        stdOut.print_messg(pip_command)
 
         # subprocess.run(
         #     pip_command
@@ -179,13 +179,13 @@ def clone(arg_2, arg_3, VIRTUAL_ENV_VAR, ENVS_PATH):
                 pass
                 # create(arg_3, None, VIRTUAL_ENV_VAR, ENVS_PATH)
             else:
-                stdout.print_error(2)
+                stdOut.print_error(2)
 
         else:
-            stdout.print_error(3)
+            stdOut.print_error(3)
     
     else:
-        stdout.print_error(1)
+        stdOut.print_error(1)
     
     return
 

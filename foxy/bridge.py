@@ -1,6 +1,6 @@
 import sys
 import os
-import stdout
+import stdOut
 import args_dictionary
 import env_class
 import parser
