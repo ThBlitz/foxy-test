@@ -1,3 +1,3 @@
 py_exe="/usr/local/bin/python3"
-fox_path="/home/mount/foxy/bridge.py"
+fox_path="/home/mount/foxy-test/foxy/bridge.py"
 py_envs="/py_envs"

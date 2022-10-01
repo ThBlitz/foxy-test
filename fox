@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-#sed -i.bak s/$'\r'//g ./path_settings
+#sed -i.bak s/$'\r'//g ./path_settings (script to change new line encodings)
 
 arg1=$1
 arg2=$2
