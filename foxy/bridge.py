@@ -37,10 +37,10 @@ if __name__ == '__main__':
     validity = arg_tree.validate(user_args)
     
     if validity == False:
-        stdout.print_error(0)
+        stdOut.print_error(0)
         recommends = arg_tree.recommend(user_args)[:4]
         recommends = [' fox ' + ' '.join(x) for x in recommends]
-        stdout.print_messg(['suggestions ...'] + recommends, lambda x:x, False, True) 
+        stdOut.print_messg(['suggestions ...'] + recommends, lambda x:x, False, True) 
         __EXIT__ = True
     
 
@@ -49,9 +49,9 @@ if __name__ == '__main__':
         permission, operation = method[0], method[1]
         env_obj = env_class.ENV(VIRTUAL_ENV_VAR, ENVS_PATH, PWD)
         if permission == 'o' and env_obj.is_active() != False:
-            stdout.print_error(1)
+            stdOut.print_error(1)
         elif permission == 'i' and env_obj.is_active() == False:
-            stdout.print_error(4)
+            stdOut.print_error(4)
         else:
             Operation_Arguments = {
                 'env_obj': env_obj,
