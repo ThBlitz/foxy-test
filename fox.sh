@@ -2,48 +2,6 @@
 
 #sed -i.bak s/$'\r'//g ./path_settings
 
-arg1=$1
-arg2=$2
-arg3=$3
-arg4=$4
-arg5=$5
-arg6=$6
-arg7=$7
-
-if [ -z ${arg1} ]
-then
-    arg1="__none__"
-fi
-
-if [ -z ${arg2} ]
-then
-    arg2="__none__"
-fi
-
-if [ -z ${arg3} ]
-then
-    arg3="__none__"
-fi
-
-if [ -z ${arg4} ]
-then
-    arg4="__none__"
-fi
-
-if [ -z ${arg5} ]
-then
-    arg5="__none__"
-fi
-
-if [ -z ${arg6} ]
-then
-    arg6="__none__"
-fi
-
-if [ -z ${arg7} ]
-then
-    arg7="__none__"
-fi
 
 if [ -z ${VIRTUAL_ENV} ]
 then
@@ -52,7 +10,7 @@ fi
 
 workingDirectory=$PWD
 
-. $workingDirectory/path_settings.foxy
+. $workingDirectory/.foxy
 
 if [ -n ${py_envs} ]
 then
@@ -61,12 +19,12 @@ else
     py_envs=$workingDirectory
 fi
 
-if [ $arg1 == "activate" ] && [$arg2 != "__none__"]
+# if [ $arg1 == "activate" ]
+# then
+#     source $py_envs/$arg2/bin/activate
+if [ -n ${fox_path} ] && [ -n ${py_exe} ]
 then
-    source $py_envs/$arg2/bin/activate
-elif [ -n ${fox_path} ] && [ -n ${py_exe} ]
-then
-    $py_exe $fox_path $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7 $PWD $VIRTUAL_ENV $py_envs
+    $py_exe $fox_path $@ $PWD $VIRTUAL_ENV $py_envs
 fi
 
 
