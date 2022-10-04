@@ -2,13 +2,23 @@ import collections
 
 class breakout_trie_node:
     def __init__(self):
-        self.children = [None] * 28
+        # 26 + '_' + ' ' + 10 
+        self.children = [None] * 40
         self.end = None
+        self.len = 40
 
     def index(self, char):
-        if char == ' ':
-            return 27
-        return ord(char) - 96 
+        # 0 node, 1 _, 2 ' ', a - z, 0 - 9
+        num = ord(char)
+        if num <= 57 and num >= 48:
+            return num - 48 + 28
+        elif num >= 97 and num <= 122:
+            return num - 97 + 3
+        elif num == 95:
+            return 1
+        elif num == 32:
+            return 2
+        return math.inf  
 
 
 # class breakout_trie_node:
@@ -76,7 +86,7 @@ class Breakout_Trie:
             idx = node.index(args[i])
             if node.children[idx] != None:
                 recur(i - 1, node.children[idx], bag)
-            if node.children[0] != None:
+            elif node.children[0] != None:
                 arg = ''
                 while i >= 0 and args[i] != ' ':
                     arg += args[i]
@@ -89,122 +99,11 @@ class Breakout_Trie:
         return self.collect
     
 
-
-class args_trie:
-    def __init__(self):
-        self.root = args_trie_node()
-
-    def index(self, char):
-        if char == ' ':
-            return 27
-        return ord(char) - 96
-    
-    def character(self, num):
-        if num == 27:
-            return ' '
-        return chr(num + 96)
-
-    def add(self, args, method):
-        def recur(i, special, node):
-            
-            if i < 0:
-                node.end_method = method
-                return
-
-            if args[i] == '<':
-                special = True
-                i -= 1
-            elif args[i] == '>':
-                special = False
-                i -= 1
-
-            idx = self.index(args[i])
-            if special == True:
-                if node.special_children[idx] == None:
-                    node.special_children[idx] = args_trie_node()
-                recur(i - 1, special, node.special_children[idx])
-                return
-            if node.children[idx] == None:
-                node.children[idx] = args_trie_node()
-            
-            recur(i - 1, special, node.children[idx])
-            return
-        args += ' '
-        args = args[::-1]
-        recur(len(args) - 1, False, self.root)
-        return
-
-    def parse(self, args):
-        self.params = []
-        self.count = 0
-        def recur(i, node, param):
-            self.count += 1
-            if i < 0:
-                if node.end_method != None:
-                    param.append(node.end_method)
-                    self.params.append(param)
-                    return True
-                return False
-            
-            idx = self.index(args[i])
-            valid = False
-            if node.children[idx] != None:
-                valid = recur(i - 1, node.children[idx], param)
-        
-            arg = ''
-            while args[i] != ' ':
-                arg += args[i]
-                i -= 1
-            
-            for idx in range(0, 27):
-                if node.special_children[idx] != None:
-                    valid = recur(i, node.special_children[idx], param + [arg] if len(arg) > 0 else param)
-            return valid 
-        args += ' '
-        args = args[::-1]
-        recur(len(args) - 1, self.root, [])
-        print(self.count)
-        return self.params
-
-    def print(self):
-        queue = collections.deque()
-        queue.append(self.root)
-        levels = []
-        count = 1
-        while queue:
-            level = [[], []]
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                count += 1
-                for idx in range(27):
-                    if node.children[idx] != None:
-                        level[0].append(self.character(idx))
-                        queue.append(node.children[idx])
-                for idx in range(27):
-                    if node.special_children[idx] != None:
-                        level[1].append(self.character(idx))
-                        queue.append(node.special_children[idx])
-            levels.append(level)
-        for level in levels:
-            print(level)
-        print(count)
-
 tree = Breakout_Trie()
-
-# tree.add('fox create <new env> after', "create new env")
-# tree.add('fox create <old> after', "overwritten env")
-# tree.add('fox <create> crr caa', '<ccc>')
-# tree.add('fox create <new new>', 'create new new')
-# tree.add('fox build <new env> <now>', 'new build')
-# tree.add('fox build new nnn', 'new None')
-
-# print(tree.parse('fox build new nnn'))
-
+import time
+old = time.time()
 import args_dictionary
-
-operations = args_dictionary.args_to_operations
-
-for op in operations:
-    tree.add('fox ' + op, operations[op])
-
-print(tree.parse('fox clone old_env upto version eighty_nine as new_env'), tree.count, tree.size, tree.len)
+for arg in args_dictionary.arguments:
+    tree.add('fox ' + arg[0], arg[1])
+print(tree.parse('fox clone env from enn'))
+print(time.time() - old)
