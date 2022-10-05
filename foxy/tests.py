@@ -11,7 +11,7 @@ class breakout_trie_node:
         # 0 node, 1 _, 2 ' ', a - z, 0 - 9
         num = ord(char)
         if num <= 57 and num >= 48:
-            return num - 48 + 28
+            return num - 48 + 29
         elif num >= 97 and num <= 122:
             return num - 97 + 3
         elif num == 95:
@@ -19,6 +19,17 @@ class breakout_trie_node:
         elif num == 32:
             return 2
         return math.inf  
+
+    def character(self, idx):
+        if idx >= 29 and idx <= 37:
+            return chr(idx + 48 - 29)
+        elif idx >= 3 and idx <= 28:
+            return chr(idx + 97 - 3)
+        elif idx == 1:
+            return chr(95)
+        elif idx == 2:
+            return chr(32)
+        return -1 * math.inf 
 
 
 # class breakout_trie_node:
@@ -97,6 +108,49 @@ class Breakout_Trie:
         args = args[::-1]
         recur(len(args) - 1, self.root, [])
         return self.collect
+
+    def get_all(self, node):
+        self.all = []
+        def recur(node, args = ''):
+            if node.end != None:
+                self.all.append(args[:])
+            
+            for idx in range(1, node.len):
+                if node.children[idx] != None:
+                    recur(node.children[idx], args + node.character(idx))
+            if node.children[0] != None:
+                recur(node.children[0], args + '`')
+
+        recur(node)        
+        return self.all
+
+    def suggest(self, args):
+        self.correct_ones = []
+        def recur(i, node, bag):
+            if i < 0:
+                self.correct_ones.append((node, bag[:]))
+                return
+            idx = node.index(args[i])
+            if node.children[idx] != None:
+                recur(i - 1, node.children[idx], bag + args[i])
+            elif node.children[0] != None:
+                arg = '`'
+                while i >= 0 and args[i] != ' ':
+                    arg += args[i]
+                    i -= 1
+                arg += '`'
+                for breakout in self.get_leaves(node.children[0]):
+                    recur(i, breakout, bag + arg)
+            else:
+                self.correct_ones.append((node, bag[:]))            
+            return
+        args = args[::-1]
+        recur(len(args) - 1, self.root, '')
+        suggestions = []
+        for node, correct_args in self.correct_ones:
+            for rest_args in self.get_all(node):
+                suggestions.append(correct_args + rest_args)
+        return suggestions
     
 
 tree = Breakout_Trie()
@@ -105,5 +159,7 @@ old = time.time()
 import args_dictionary
 for arg in args_dictionary.arguments:
     tree.add('fox ' + arg[0], arg[1])
-print(tree.parse('fox clone env from enn'))
+suggestions = tree.suggest("fox clone env upto")
+print(suggestions)
+print(tree.parse('fox info env more'))
 print(time.time() - old)

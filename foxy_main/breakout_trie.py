@@ -82,5 +82,49 @@ class Breakout_Trie:
         recur(len(args) - 1, self.root, [])
         print(self.suggestions)
         return self.collect
+
+    def get_all(self, node):
+        self.all = []
+        def recur(node, args = ''):
+            if node.end != None:
+                self.all.append(args[:])
+            
+            for idx in range(1, node.len):
+                if node.children[idx] != None:
+                    recur(node.children[idx], args + node.character(idx))
+            if node.children[0] != None:
+                recur(node.children[0], args + '`')
+
+        recur(node)        
+        return self.all
+
+    def suggest(self, args):
+        self.correct_ones = []
+        def recur(i, node, bag):
+            if i < 0:
+                self.correct_ones.append((node, bag[:]))
+                return
+            idx = node.index(args[i])
+            if node.children[idx] != None:
+                recur(i - 1, node.children[idx], bag + args[i])
+            elif node.children[0] != None:
+                arg = '`'
+                while i >= 0 and args[i] != ' ':
+                    arg += args[i]
+                    i -= 1
+                arg += '`'
+                for breakout in self.get_leaves(node.children[0]):
+                    recur(i, breakout, bag + arg)
+            else:
+                self.correct_ones.append((node, bag[:]))            
+            return
+        args = args[::-1]
+        recur(len(args) - 1, self.root, '')
+        suggestions = []
+        for node, correct_args in self.correct_ones:
+            for rest_args in self.get_all(node):
+                suggestions.append(correct_args + rest_args)
+        return suggestions
     
-    
+
+
