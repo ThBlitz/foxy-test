@@ -11,7 +11,7 @@ class breakout_trie_node:
         # 0 node, 1 _, 2 ' ', a - z, 0 - 9
         num = ord(char)
         if num <= 57 and num >= 48:
-            return num - 48 + 28
+            return num - 48 + 29
         elif num >= 97 and num <= 122:
             return num - 97 + 3
         elif num == 95:
@@ -19,6 +19,18 @@ class breakout_trie_node:
         elif num == 32:
             return 2
         return math.inf  
+
+    def character(self, idx):
+        if idx >= 29 and idx <= 37:
+            return chr(idx + 48 - 29)
+        elif idx >= 3 and idx <= 28:
+            return chr(idx + 97 - 3)
+        elif idx == 1:
+            return chr(95)
+        elif idx == 2:
+            return chr(32)
+        return -1 * math.inf 
+
 
 class Breakout_Trie:
     def __init__(self):
@@ -66,7 +78,7 @@ class Breakout_Trie:
             if i < 0:
                 if node.end != None:
                     self.collect.append(bag + [node.end])
-                    return 
+                return 
             idx = node.index(args[i])
             if node.children[idx] != None:
                 recur(i - 1, node.children[idx], bag)
@@ -80,7 +92,6 @@ class Breakout_Trie:
             return 
         args = args[::-1]
         recur(len(args) - 1, self.root, [])
-        print(self.suggestions)
         return self.collect
 
     def get_all(self, node):

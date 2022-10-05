@@ -33,6 +33,8 @@ if __name__ == '__main__':
     args_list = tree.parse(arg_str)
     if len(args_list) == 0:
         stdOut.print_error(0)
+        stdOut.print_messg(['suggestions ..'], upper_buffer = False, lower_buffer = False)
+        stdOut.print_messg(tree.suggest(arg_str), upper_buffer = False)
         exit()
     elif len(args_list) > 1:
         print('ERROR: MULTIPLE METHODS RETURNED BY TRIE')
@@ -47,5 +49,6 @@ if __name__ == '__main__':
         stdOut.print_error(4)
     else:
         method(pack)
-
+    stdOut.print_messg(['you can also try ..'], upper_buffer = False, lower_buffer= False)
+    stdOut.print_messg(tree.suggest(arg_str), upper_buffer = False)
     

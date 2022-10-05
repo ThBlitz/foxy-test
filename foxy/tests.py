@@ -90,18 +90,24 @@ class Breakout_Trie:
         self.count = 0
         def recur(i, node, bag):
             self.count += 1
+            print(i)
             if i < 0:
+                print(i)
                 if node.end != None:
                     self.collect.append(bag + [node.end])
-                    return 
+                return 
             idx = node.index(args[i])
             if node.children[idx] != None:
+                print(args[i], i, 'normal')
                 recur(i - 1, node.children[idx], bag)
             elif node.children[0] != None:
+                print(args[i], i, 'sp')
                 arg = ''
                 while i >= 0 and args[i] != ' ':
+                    print(i)
                     arg += args[i]
                     i -= 1
+                print(i, 'here')
                 for breakout in self.get_leaves(node.children[0]):
                     recur(i, breakout, bag + [arg])
             return 
@@ -160,6 +166,6 @@ import args_dictionary
 for arg in args_dictionary.arguments:
     tree.add('fox ' + arg[0], arg[1])
 suggestions = tree.suggest("fox clone env upto")
-print(suggestions)
-print(tree.parse('fox info env more'))
+
+print(tree.parse('fox in'))
 print(time.time() - old)
