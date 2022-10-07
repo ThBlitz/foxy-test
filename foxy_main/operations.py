@@ -1,34 +1,59 @@
 import stdOut
+import os
 
-# class Args_Pack:
-#     def __init__(self, PWD, VIRTUAL_ENV_VAR, ENVS_PATH, args_list):
-#         self.PWD = PWD
-#         self.VIRTUAL_ENV_VAR = VIRTUAL_ENV_VAR
-#         self.ENVS_PATH = ENVS_PATH
-#         self.args_list = args_list
+class Args_Pack:
+    def __init__(self, PWD, VIRTUAL_ENV_VAR, ENVS_PATH, args_list, breakout_trie):
+        self.PWD = PWD
+        self.VIRTUAL_ENV_VAR = VIRTUAL_ENV_VAR
+        self.ENVS_PATH = ENVS_PATH
+        self.args_list = args_list
+        self.breakout_trie = breakout_trie
+        self.print_suggestions = True
+        self.max_suggestions_len = 4# class Args_Pack:
+
 
 def commands(pack):
-    recommends = pack.breakout_trie.recommend()
+    recommends = pack.breakout_trie.suggest('fox')
+    pack.print_suggestions = False
     stdOut.print_messg(recommends)
-    return
+    return 
 
 def info(pack):
     stdOut.print_info(0)
-    return
-
-def commands(args):
-    recommends = args['arg_tree'].recommend(['fox'])
-    stdOut.print_messg(recommends, lambda x: 'fox ' + ' '.join(x)) 
-    return
-
-def info(args):
-    stdOut.print_info(0)
-    return
-
-def list_envs(args):
-    envs = [x.name for x in args['env_obj'].envs_dir_list]
-    stdOut.print_messg(envs)
     return 
+
+def __get_envs(pack):
+    envs = [f for f in os.scandir(pack.ENVS_PATH) if f.is_dir() and os.path.exists(os.path.join(f.path, f'{f.name}.{pack.extension}'))]
+    return envs
+
+def __env_exists(pack, env_name):
+    for f in __get_envs(pack):
+        if f.name == env_name:
+            return True
+    return False
+
+def list_envs(pack):
+    stdOut.print_messg([f'envs at {pack.ENVS_PATH} .. '])
+    envs = __get_envs(pack)
+    stdOut.print_messg(envs, x = lambda x: x.name, upper_buffer = False, lower_buffer = False)
+    stdOut.print_messg([f'number of envs : {len(envs)}'])
+    return
+
+def create(pack):
+    envs = __get_envs(pack)
+    if __env_exists(pack, pack.args_list[0]):
+        return 
+
+    return 
+
+def create(env_obj, args, arg_tree, user_args):
+    if args[0] in [x.name for x in env_obj.envs_dir_list]:
+        stdout.print_error(6)
+    else:
+        env_obj.initialize(args[0])
+        _create_(env_obj)
+    return
+
 
 def env_info(args):
     if args['env_obj'].initialize() == True:

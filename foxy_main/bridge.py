@@ -8,9 +8,11 @@ class Args_Pack:
         self.PWD = PWD
         self.VIRTUAL_ENV_VAR = VIRTUAL_ENV_VAR
         self.ENVS_PATH = ENVS_PATH
+        self.extension = 'foxy'
         self.args_list = args_list
         self.breakout_trie = breakout_trie
-
+        self.print_suggestions = True
+        self.max_suggestions_len = 4
 
 if __name__ == '__main__':
     arguments = []
@@ -49,6 +51,7 @@ if __name__ == '__main__':
         stdOut.print_error(4)
     else:
         method(pack)
-    stdOut.print_messg(['you can also try ..'], upper_buffer = False, lower_buffer= False)
-    stdOut.print_messg(tree.suggest(arg_str), upper_buffer = False)
-    
+    if pack.print_suggestions == True:
+        stdOut.print_messg(['you can also try ..'], upper_buffer = False, lower_buffer= False)
+        stdOut.print_messg(tree.suggest(arg_str)[:pack.max_suggestions_len], upper_buffer = False)
+        
